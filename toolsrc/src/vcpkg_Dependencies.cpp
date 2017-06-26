@@ -158,12 +158,12 @@ namespace vcpkg::Dependencies
         {
             return &cache_it->second;
         }
-        ExpectedT<SourceControlFile, ParseControlErrorInfo> source_control_file =
+        Parse::ParseExpected<SourceControlFile> source_control_file =
             Paragraphs::try_load_port(ports.get_filesystem(), ports.port_dir(spec));
 
         if (auto scf = source_control_file.get())
         {
-            auto it = cache.emplace(spec, std::move(*scf));
+            auto it = cache.emplace(spec, std::move(*scf->get()));
             return &it.first->second;
         }
 
@@ -201,7 +201,7 @@ namespace vcpkg::Dependencies
                 auto it = status_db.find_installed(spec);
                 if (it != status_db.end()) return InstallPlanAction{spec, {*it->get(), nullopt, nullopt}, request_type};
                 return InstallPlanAction{
-                    spec, {nullopt, nullopt, port_file_provider.get_control_file(spec)->core_paragraph}, request_type};
+                    spec, {nullopt, nullopt, *port_file_provider.get_control_file(spec)->core_paragraph}, request_type};
             }
         };
 
@@ -251,13 +251,11 @@ namespace vcpkg::Dependencies
                 if (auto bpgh = maybe_bpgh.get())
                     return InstallPlanAction{spec, {nullopt, *bpgh, nullopt}, request_type};
 
-                ExpectedT<SourceControlFile, ParseControlErrorInfo> source_control_file =
-                    Paragraphs::try_load_port(paths.get_filesystem(), paths.port_dir(spec));
-                auto maybe_spgh = (*source_control_file.get()).core_paragraph;
-                if (auto scf = source_control_file.get())
-                    return InstallPlanAction{spec, {nullopt, nullopt, (*scf).core_paragraph}, request_type};
+                auto maybe_scf = Paragraphs::try_load_port(paths.get_filesystem(), paths.port_dir(spec));
+                if (auto scf = maybe_scf.get())
+                    return InstallPlanAction{spec, {nullopt, nullopt, *scf->get()->core_paragraph}, request_type};
 
-                print_error_message(source_control_file.error());
+                print_error_message(maybe_scf.error());
                 Checks::exit_fail(VCPKG_LINE_INFO);
             }
         };
@@ -362,14 +360,11 @@ namespace vcpkg::Dependencies
                 if (auto bpgh = maybe_bpgh.get())
                     return ExportPlanAction{spec, {nullopt, *bpgh, nullopt}, request_type};
 
-                ExpectedT<SourceControlFile, ParseControlErrorInfo> source_control_file =
-                    Paragraphs::try_load_port(paths.get_filesystem(), paths.port_dir(spec));
-                auto maybe_spgh = (*source_control_file.get()).core_paragraph;
-                if (auto scf = source_control_file.get())
-                    return ExportPlanAction{spec, {nullopt, nullopt, (*scf).core_paragraph}, request_type};
-
+                auto maybe_scf = Paragraphs::try_load_port(paths.get_filesystem(), paths.port_dir(spec));
+                if (auto scf = maybe_scf.get())
+                    return ExportPlanAction{spec, {nullopt, nullopt, *scf->get()->core_paragraph}, request_type};
                 else
-                    print_error_message(source_control_file.error());
+                    print_error_message(maybe_scf.error());
 
                 Checks::exit_with_message(VCPKG_LINE_INFO, "Could not find package %s", spec);
             }
