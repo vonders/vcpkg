@@ -3,11 +3,11 @@ if (VCPKG_LIBRARY_LINKAGE STREQUAL static)
     set(VCPKG_LIBRARY_LINKAGE dynamic)
 endif()
 include(vcpkg_common_functions)
-set(SOURCE_PATH ${CURRENT_BUILDTREES_DIR}/src/libwebsockets-2.0.0)
+set(SOURCE_PATH ${CURRENT_BUILDTREES_DIR}/src/libwebsockets-2.2.1)
 vcpkg_download_distfile(ARCHIVE
-    URLS "https://github.com/warmcat/libwebsockets/archive/v2.0.0.zip"
-    FILENAME "libwebsockets-v2.0.0.zip"
-    SHA512 bf57a46f2c60095e7e6ec6656b185ffd2cf8f553bc22255ae8f6825d3613316d794f139cdefacbdf60ef997b0cd675fe356813d406c9b7c5a5ae838ce5326042
+    URLS "https://github.com/warmcat/libwebsockets/archive/v2.2.1.zip"
+    FILENAME "libwebsockets-v2.2.1.zip"
+    SHA512 56b02b932ee284b556fe7346d541ea7f8d9e9cf2d8eaff4829e7e1f3ba23cca8f2abea89b2f7866d82f5670996487df1acd311487b4eaf80ec741d5bc14c29f9
 )
 vcpkg_extract_source_archive(${ARCHIVE})
 
