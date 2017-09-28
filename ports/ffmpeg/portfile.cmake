@@ -6,9 +6,9 @@ endif()
 include(vcpkg_common_functions)
 set(SOURCE_PATH ${CURRENT_BUILDTREES_DIR}/src/ffmpeg-2.3.1)
 vcpkg_download_distfile(ARCHIVE
-    URLS "http://ffmpeg.org/releases/ffmpeg-2.3.1.tar.bz2"
-    FILENAME "ffmpeg-2.3.1.tar.bz2"
-    SHA512  1cc63bf73356f4e618c0d3572a216bdf5689f10deff56b4262f6d740b0bee5a4b3eac234f45fca3d4d2da77903a507b4fba725b76d2d2070f31b6dae9e7a2dab
+    URLS "http://ffmpeg.org/releases/ffmpeg-3.0.9.tar.bz2"
+    FILENAME "ffmpeg-3.0.9.tar.bz2"
+    SHA512  010535db3f1eb5598c17a31dc27d466dd98c2c05cd9017d21dc569d93bf25ad599ba27dd5a88ba7cc1d8e3f437965c5dde9a6ae95e0f8958c57476a3f97ca1fc
 )
 vcpkg_extract_source_archive(${ARCHIVE})
 
